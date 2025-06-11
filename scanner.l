@@ -21,7 +21,6 @@ int comment_has_newline = 0;
 %%
 
 \"[^\n\"]*\" {
-    char buffer[1024];
     int len = yyleng;
 
     printf("%-8s \t %s\n", "\"", "QUOTA");
@@ -64,7 +63,12 @@ int comment_has_newline = 0;
             comment_num++;
         }
 
-        printf("%-16s \t %s\n", yytext, "MUTI_LINE_COMMENT");
+        char *p = yytext;
+        if (*p == '\n') ++p;
+        while (*p == ' ' || *p == '\t') ++p;
+
+        printf("%s", p);
+        printf("       \t MUTI_LINE_COMMENT\n");
     }
     .  { yymore(); }
     
